@@ -1,0 +1,20 @@
+.msgHinge{
+
+    position: absolute;
+    right: 0px;
+    width : 20px;
+    height: 10px;
+
+}
+.inMsgHinge{
+    border-radius: 2px 1px 100% 0px;
+
+}
+
+.outMsgHinge{
+    border-radius: 2px 2px 0px 100%;
+
+}
+.inMsgBox, .outMsgBox{
+    padding : 10px 8%;
+}

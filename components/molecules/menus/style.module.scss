@@ -1,0 +1,18 @@
+.menu_container{
+    z-index: 10000;
+
+    .menu_item_box{
+
+        list-style: none;
+        
+        .menu_item{
+
+            min-height: 40px;
+            min-width: 190px;
+            
+        }
+
+    }
+
+}
+
