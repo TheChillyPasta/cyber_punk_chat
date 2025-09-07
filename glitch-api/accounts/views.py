@@ -29,6 +29,42 @@ class UserViewset(viewsets.ModelViewSet):
         if self.action in ['list','retrieve']:
             return UserProfileSerializer
         return UserSerializer
+
+    @action(detail=False ,methods= ['get'])
+    def filter_user(self, request):
+        """
+        Retrieve a user based on username, email, or contact number.
+        Accepts 'username', 'email', or 'phone_number' as query parameters.
+        """
+        username = request.query_params.get('username')
+        email = request.query_params.get('email')
+        phone_number = request.query_params.get('phone_number')
+
+        if not phone_number.startswith('+91'):
+            phone_number = "+91" + phone_number
+
+        user = None
+        if username:
+            try:
+                user = CustomUser.objects.filter(username=username)
+            except CustomUser.DoesNotExist:
+                return Response({'error': 'User with this username does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        elif email:
+            try:
+                user = CustomUser.objects.filter(email=email)
+            except CustomUser.DoesNotExist:
+                return Response({'error': 'User with this email does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        elif phone_number:
+            try:
+                user = CustomUser.objects.filter(phone_number=phone_number)
+            except CustomUser.DoesNotExist:
+                return Response({'error': 'User with this phone number does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'error': 'Please provide username, email, or phone_number as a query parameter.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = UserProfileSerializer(user, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def get_permissions(self):
         if self.action == 'create':
             return [AllowAny()]
@@ -75,11 +111,6 @@ class AuthViewsets(viewsets.ViewSet):
         logout(request)
         return Response({"message":"User is logged out Successfully"},status=status.HTTP_200_OK)    
         
-
-
-
-
-
 
 
 
