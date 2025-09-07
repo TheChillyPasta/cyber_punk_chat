@@ -169,6 +169,7 @@ interface ChatContextType {
   updateUserStatus: (status: User["status"]) => void
   loadChats: () => Promise<void>
   loadChatMessages: (chatId: string) => Promise<void>
+  createChat: (name: string, userIds: string[]) => Promise<Chat | null>
   isWsConnected: boolean
   wsError: string | null
   wsChatId: string | null
@@ -466,6 +467,33 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "UPDATE_USER_STATUS", payload: status })
   }
 
+  const createChat = async (name: string, userIds: string[]): Promise<Chat | null> => {
+    try {
+      console.log(`Creating chat with name: ${name}, user IDs: ${userIds.join(', ')}`)
+      const response = await api.createChat(name, userIds)
+      
+      if (response.ok) {
+        const newChat = await response.json()
+        console.log('Chat created successfully:', newChat)
+        
+        // Add the new chat to the state
+        dispatch({ type: "SET_CHATS", payload: [...state.chats, newChat] })
+        
+        // Automatically select the new chat
+        await selectChat(newChat.id)
+        
+        return newChat
+      } else {
+        const errorData = await response.json()
+        console.error("Failed to create chat:", errorData)
+        return null
+      }
+    } catch (error) {
+      console.error("Error creating chat:", error)
+      return null
+    }
+  }
+
   // WebSocket connection management
   useEffect(() => {
     // Clean up WebSocket connections when component unmounts
@@ -485,6 +513,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         updateUserStatus,
         loadChats,
         loadChatMessages,
+        createChat,
         isWsConnected,
         wsError,
         wsChatId: activeChatId,

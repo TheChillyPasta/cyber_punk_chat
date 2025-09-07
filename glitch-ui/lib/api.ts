@@ -209,4 +209,23 @@ export const api = {
     }),
   
   getUnreadMessages: () => authenticatedRequest("/messages/mark_unread/"),
+  
+  // User search API
+  filterUser: (phoneNumber: string) =>
+    authenticatedRequest(`/user/filter_user?phone_number=${phoneNumber}`, {
+      method: "GET",
+    }),
+  
+  // Create chat API
+  createChat: (name: string, userIds: string[]) =>
+    authenticatedRequest("/chat/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        user_ids: userIds,
+      }),
+    }),
 }
