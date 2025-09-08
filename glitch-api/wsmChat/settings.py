@@ -33,7 +33,7 @@ SECRET_KEY =os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', "https://wsmchatbackend-production.up.railway.app/"]
+ALLOWED_HOSTS = ['*', "https://cyberpunkchat-production.up.railway.app/"]
 
 
 # Application definition
@@ -166,6 +166,9 @@ CHANNEL_LAYERS = {
     },
 }
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://cyberpunkchat-production.up.railway.app"
+]
 
 #custom manage of access token
 SIMPLE_JWT = {
