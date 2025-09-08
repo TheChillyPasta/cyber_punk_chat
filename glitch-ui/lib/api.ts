@@ -1,6 +1,7 @@
 // API utility functions for authenticated requests
+import { config } from './config'
 
-const API_BASE_URL = "http://127.0.0.1:8000/api"
+const API_BASE_URL = config.apiBaseUrl
 
 // Get access token from cookies
 function getAccessToken(): string | null {
@@ -91,9 +92,9 @@ export async function authenticatedRequest(
   }
 
   // Prepare headers
-  const headers = {
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...options.headers,
+    ...(options.headers as Record<string, string> || {}),
   }
 
   if (accessToken) {
@@ -208,7 +209,7 @@ export const api = {
       method: "POST",
     }),
   
-  getUnreadMessages: () => authenticatedRequest("/messages/mark_unread/"),
+  getUnreadMessagesCount: () => authenticatedRequest("/messages/mark_unread/"),
   
   // User search API
   filterUser: (phoneNumber: string) =>

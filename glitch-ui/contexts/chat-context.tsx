@@ -5,6 +5,7 @@ import { createContext, useContext, useReducer, useEffect, useState, useMemo, us
 import { useAuth } from "./auth-context"
 import { api } from "@/lib/api"
 import { useWebSocketManager } from "@/hooks/use-websocket-manager"
+import { config } from "@/lib/config"
 import { getAccessToken, getUserId } from "@/lib/cookies"
 
 export interface Message {
@@ -244,7 +245,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     getActiveConnectionStatus,
     getConnectionStats,
   } = useWebSocketManager({
-    baseUrl: 'ws://127.0.0.1:8000',
+    baseUrl: config.wsBaseUrl,
     token: accessToken || '',
     onMessage: (chatId, data) => {
       // Check if message already exists to prevent duplicates
