@@ -19,6 +19,7 @@ export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
   const { state, signup, clearError } = useAuth()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [ phone_number, setPhoneNumber] = useState("+919089872718")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -37,12 +38,12 @@ export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
     e.preventDefault()
     clearError()
 
-    if (password !== confirmPassword) {
-      // We'll handle this in the auth context
-      return
-    }
+    // if (password !== confirmPassword) {
+    //   // We'll handle this in the auth context
+    //   return
+    // }
 
-    await signup(name, email, password)
+    await signup(name, email, password, phone_number)
   }
 
   const triggerGlitch = () => {
@@ -128,8 +129,24 @@ export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="phone number" className="text-orange-500 font-mono text-sm">
+                PHONE NUMBER
+              </Label>
+              <Input
+                id="phone_number"
+                type="text"
+                value={phone_number}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="+919089872718"
+                className="bg-neutral-800/50 border-orange-500/30 text-white placeholder:text-neutral-500 focus:border-orange-500 focus:ring-orange-500/20 font-mono"
+                required
+                onFocus={triggerGlitch}
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="password" className="text-orange-500 font-mono text-sm">
-                ACCESS_CODE
+                PASSWORD
               </Label>
               <div className="relative">
                 <Input
@@ -150,37 +167,6 @@ export default function SignupForm({ onSwitchToLogin }: SignupFormProps) {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4 text-neutral-400" />
-                  ) : (
-                    <Eye className="h-4 w-4 text-neutral-400" />
-                  )}
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-orange-500 font-mono text-sm">
-                CONFIRM_ACCESS_CODE
-              </Label>
-              <div className="relative">
-                <Input
-                  id="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="bg-neutral-800/50 border-orange-500/30 text-white placeholder:text-neutral-500 focus:border-orange-500 focus:ring-orange-500/20 font-mono pr-10"
-                  required
-                  onFocus={triggerGlitch}
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
                     <EyeOff className="h-4 w-4 text-neutral-400" />
                   ) : (
                     <Eye className="h-4 w-4 text-neutral-400" />

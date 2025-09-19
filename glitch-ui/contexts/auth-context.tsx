@@ -197,11 +197,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const signup = async (name: string, email: string, password: string) => {
+  const signup = async (name: string, email: string, password: string, phone_number: string) => {
     dispatch({ type: "LOGIN_START" })
     
     try {
-      const response = await api.register(name, email, password, "None")
+      const response = await api.register(name, email, password, phone_number)
 
       if (response.ok) {
         const data = await response.json()

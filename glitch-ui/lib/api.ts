@@ -133,7 +133,7 @@ export const api = {
     }),
 
   register: (name: string, email: string, password: string, phone_number: string = "None") =>
-    fetch(`${API_BASE_URL}/auth/register/`, {
+    fetch(`${API_BASE_URL}/user/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password, phone_number }),
